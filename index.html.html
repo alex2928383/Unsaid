@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UNSAID</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+:root{
+  --paper:#ffffff;
+  --ink:#0a0a0a;
+  --muted:#666666;
+  --line:#d1d5db;
+  --accent:#000000;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  padding:70px 20px 120px;
+  background:#ffffff;
+  color:var(--ink);
+  font-family: "Times New Roman", Times, serif;
+}
+
+/* HEADER */
+h1{
+  text-align:center;
+  font-size:3.4rem;
+  font-weight:400;
+  letter-spacing:6px;
+  margin-bottom:10px;
+}
+
+.subtitle{
+  text-align:center;
+  font-size:.75rem;
+  color:var(--muted);
+  letter-spacing:1px;
+  text-transform:uppercase;
+  margin-bottom:90px;
+}
+
+/* LETTER SECTION */
+.letter-sheet{
+  max-width:760px;
+  margin:0 auto 120px;
+  padding:80px 80px 100px;
+  background:var(--paper);
+  border:1px solid var(--ink);
+  box-shadow:
+    0 0 0 1px #000,
+    0 20px 40px rgba(0,0,0,.12);
+  position:relative;
+}
+
+/* institutional margin line */
+.letter-sheet::before{
+  content:"";
+  position:absolute;
+  top:0;
+  bottom:0;
+  left:44px;
+  width:1px;
+  background:#000;
+  opacity:.15;
+}
+
+.letter-sheet h2{
+  font-size:1.5rem;
+  font-weight:400;
+  margin-bottom:50px;
+}
+
+/* form */
+label{
+  display:block;
+  font-size:.7rem;
+  letter-spacing:1px;
+  color:var(--muted);
+  margin-top:34px;
+  text-transform:uppercase;
+}
+
+input,textarea{
+  width:100%;
+  border:none;
+  border-bottom:1px solid var(--ink);
+  padding:12px 4px;
+  margin-top:8px;
+  font-family:inherit;
+  font-size:1rem;
+  background:transparent;
+  outline:none;
+}
+
+textarea{
+  min-height:220px;
+  line-height:2;
+  resize:vertical;
+}
+
+/* signature */
+.signature{
+  margin-top:70px;
+  font-style:italic;
+  color:var(--muted);
+}
+
+/* seal button */
+.seal{
+  margin-top:60px;
+  padding:10px 40px;
+  border-radius:0;
+  border:1px solid var(--ink);
+  background:#ffffff;
+  cursor:pointer;
+  font-family:inherit;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-size:.75rem;
+  transition:.2s;
+}
+
+.seal:hover{
+  background:#000;
+  color:#fff;
+}
+
+/* MAILBOX SECTION */
+.mailbox-section{
+  max-width:900px;
+  margin:0 auto;
+  padding:70px 60px;
+  border:1px solid var(--ink);
+  background:#ffffff;
+}
+
+.mailbox-header{
+  display:flex;
+  align-items:center;
+  gap:26px;
+  margin-bottom:50px;
+}
+
+.mailbox{
+  width:90px;
+  height:70px;
+  border:2px solid var(--ink);
+  position:relative;
+  background:#ffffff;
+}
+
+.mailbox::before{
+  content:"";
+  position:absolute;
+  top:16px;
+  left:10px;
+  right:10px;
+  height:2px;
+  background:var(--ink);
+}
+
+.mailbox::after{
+  content:"";
+  position:absolute;
+  bottom:-18px;
+  left:38px;
+  width:14px;
+  height:18px;
+  background:var(--ink);
+}
+
+/* flag reduced */
+.flag{
+  position:absolute;
+  right:-12px;
+  top:14px;
+  width:12px;
+  height:4px;
+  background:#000;
+}
+
+.mailbox-header h2{
+  font-size:1.5rem;
+  font-weight:400;
+  letter-spacing:2px;
+}
+
+/* search */
+.search label{
+  margin-top:20px;
+}
+
+.search button{
+  margin-top:34px;
+  padding:10px 38px;
+  border-radius:0;
+  border:1px solid var(--ink);
+  background:#ffffff;
+  cursor:pointer;
+  letter-spacing:2px;
+  text-transform:uppercase;
+  font-size:.75rem;
+}
+
+.search button:hover{
+  background:#000;
+  color:#fff;
+}
+
+/* letters */
+.letter{
+  margin-top:50px;
+  padding:50px 46px;
+  background:#ffffff;
+  border:1px solid var(--ink);
+  box-shadow:0 16px 40px rgba(0,0,0,.12);
+  line-height:2;
+}
+
+.nameTag{
+  font-size:.7rem;
+  letter-spacing:1px;
+  color:var(--muted);
+  margin-bottom:26px;
+  text-transform:uppercase;
+}
+
+.empty{
+  margin-top:40px;
+  font-style:italic;
+  color:var(--muted);
+}
+
+/* responsive */
+@media(max-width:700px){
+  .letter-sheet{
+    padding:50px 30px 70px;
+  }
+  .letter-sheet::before{
+    display:none;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h1>UNSAID</h1>
+<div class="subtitle">Letters left without return addresses</div>
+
+<div class="letter-sheet">
+  <h2>Dear</h2>
+
+  <label>First Name</label>
+  <input id="firstName" placeholder="Alex">
+
+  <label>Last Initial</label>
+  <input id="lastInitial" maxlength="1" placeholder="M">
+
+  <label>Letter</label>
+  <textarea id="letterText" placeholder="I’ve carried this longer than I should have…"></textarea>
+
+  <div class="signature">— unsigned</div>
+
+  <button class="seal" onclick="submitLetter()">Seal Letter</button>
+</div>
+
+<div class="mailbox-section">
+  <div class="mailbox-header">
+    <div class="mailbox">
+      <div class="flag"></div>
+    </div>
+    <h2>Mailbox</h2>
+  </div>
+
+  <div class="search">
+    <label>First Name</label>
+    <input id="searchFirst" placeholder="Alex">
+
+    <label>Last Initial</label>
+    <input id="searchLast" maxlength="1" placeholder="M">
+
+    <button onclick="searchLetters()">Search</button>
+  </div>
+
+  <div id="results"></div>
+</div>
+
+<script>
+function getLetters(){
+  return JSON.parse(localStorage.getItem("unsaid_letters")||"[]");
+}
+
+function saveLetters(arr){
+  localStorage.setItem("unsaid_letters",JSON.stringify(arr));
+}
+
+function submitLetter(){
+  const f=firstName.value.trim();
+  const l=lastInitial.value.trim().toUpperCase();
+  const text=letterText.value.trim();
+
+  if(!f||!l||!text){
+    alert("All fields are required.");
+    return;
+  }
+
+  const letters=getLetters();
+  letters.push({
+    first:f.toLowerCase(),
+    last:l,
+    body:text,
+    time:Date.now()
+  });
+
+  saveLetters(letters);
+  letterText.value="";
+  alert("Letter sealed.");
+}
+
+function searchLetters(){
+  const f=searchFirst.value.trim().toLowerCase();
+  const l=searchLast.value.trim().toUpperCase();
+  const box=document.getElementById("results");
+  box.innerHTML="";
+
+  if(!f||!l){
+    box.innerHTML="<div class='empty'>Enter a name.</div>";
+    return;
+  }
+
+  const matches=getLetters().filter(x=>x.first===f&&x.last===l);
+
+  if(matches.length===0){
+    box.innerHTML="<div class='empty'>The mailbox is empty.</div>";
+    return;
+  }
+
+  matches
+    .sort((a,b)=>b.time-a.time)
+    .forEach(m=>{
+      const d=document.createElement("div");
+      d.className="letter";
+      d.innerHTML=`
+        <div class="nameTag">To ${f.charAt(0).toUpperCase()+f.slice(1)} ${l}.</div>
+        ${m.body.replace(/\n/g,"<br>")}
+      `;
+      box.appendChild(d);
+    });
+}
+</script>
+
+</body>
+</html>
+
+
