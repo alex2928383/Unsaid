@@ -373,45 +373,23 @@ function searchLetters(){
   </a>
 </footer>
 
-  <div id="termsPopup" style="
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.4);
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-">
-  <div style="
-    background:#fff;
-    color:#111;
-    max-width:420px;
-    padding:30px;
-    text-align:center;
-    font-family:Georgia, 'Times New Roman', serif;
-    line-height:1.6;
-    box-shadow:0 20px 60px rgba(0,0,0,0.2);
-  ">
-    <p>
-      By using <strong>Unsaid</strong>, you agree to our
-      <a href="/terms.html">Terms & Conditions</a> and
-      <a href="/privacy.html">Privacy Policy</a>.
-    </p>
-    <button onclick="acceptTerms()" style="
-      margin-top:20px;
-      padding:10px 20px;
-      border:none;
-      background:#111;
-      color:#fff;
-      cursor:pointer;
-      font-size:0.9rem;
-    ">
-      Continue
-    </button>
-  </div>
-</div>
+  <script>
+  window.addEventListener("DOMContentLoaded", function () {
+    const popup = document.getElementById("termsPopup");
+
+    if (!localStorage.getItem("unsaid_terms_seen")) {
+      popup.style.display = "flex";
+    }
+
+    window.acceptTerms = function () {
+      localStorage.setItem("unsaid_terms_seen", "yes");
+      popup.style.display = "none";
+    };
+  });
+</script>
 
   
 </body>
 </html>
+
 
