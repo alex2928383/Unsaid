@@ -246,6 +246,9 @@ textarea{
 
   <label>This letter is for… <span style="text-transform:none">(optional)</span></label>
   <input id="firstName" placeholder="John Doe">
+  <div style="font-size:.75rem;color:#666;margin-top:6px;font-style:italic;">
+    You may leave this as John Doe or use an alias.
+  </div>
 
   <label>Letter</label>
   <textarea id="letterText" placeholder="I’ve carried this longer than I should have…"></textarea>
@@ -279,6 +282,10 @@ function saveLetters(arr){
   localStorage.setItem("unsaid_letters",JSON.stringify(arr));
 }
 
+function normalizeName(str){
+  return str.toLowerCase().replace(/\s+/g," ").trim();
+}
+
 function submitLetter(){
   const name = firstName.value.trim() || "John Doe";
   const text = letterText.value.trim();
@@ -301,7 +308,7 @@ function submitLetter(){
 }
 
 function searchLetters(){
-  const q = searchFirst.value.trim().toLowerCase();
+  const q = normalizeName(searchFirst.value);
   const box=document.getElementById("results");
   box.innerHTML="";
 
@@ -310,8 +317,9 @@ function searchLetters(){
     return;
   }
 
-  const matches = getLetters().filter(x=>x.name.toLowerCase()===q);
+const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
 
+  
   if(matches.length===0){
     box.innerHTML="<div class='empty'>The mailbox is empty.</div>";
     return;
