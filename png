@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
   <title>My Page Title</title>
-  <link rel="icon" type="image/png" href="/main/icons8-letter-32.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
 
-<h1>This is a Heading</h1>
-<p>This is a paragraph.</p>
+  <h1>This is a Heading</h1>
+  <p>This is a paragraph.</p>
 
 </body>
 </html>
