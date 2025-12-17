@@ -3,10 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <title>Unsaid</title>
-  <meta name="google-adsense-account" content="ca-pub-5981336162783121">
-  <link rel="icon" type="image/png" href="favicon.png">
 
-  
+<meta name="google-adsense-account" content="ca-pub-5981336162783121">
+<link rel="icon" type="image/png" href="favicon.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
@@ -15,7 +14,6 @@
   --ink:#0a0a0a;
   --muted:#666666;
   --line:#d1d5db;
-  --accent:#000000;
 }
 
 *{box-sizing:border-box}
@@ -43,7 +41,15 @@ h1{
   color:var(--muted);
   letter-spacing:1px;
   text-transform:uppercase;
+  margin-bottom:30px;
+}
+
+.threshold{
+  text-align:center;
+  font-size:.95rem;
+  color:#444;
   margin-bottom:90px;
+  font-style:italic;
 }
 
 /* LETTER SECTION */
@@ -59,7 +65,6 @@ h1{
   position:relative;
 }
 
-/* institutional margin line */
 .letter-sheet::before{
   content:"";
   position:absolute;
@@ -77,7 +82,6 @@ h1{
   margin-bottom:50px;
 }
 
-/* form */
 label{
   display:block;
   font-size:.7rem;
@@ -105,18 +109,15 @@ textarea{
   resize:vertical;
 }
 
-/* signature */
 .signature{
   margin-top:70px;
   font-style:italic;
   color:var(--muted);
 }
 
-/* seal button */
 .seal{
   margin-top:60px;
   padding:10px 40px;
-  border-radius:0;
   border:1px solid var(--ink);
   background:#ffffff;
   cursor:pointer;
@@ -132,13 +133,12 @@ textarea{
   color:#fff;
 }
 
-/* MAILBOX SECTION */
+/* MAILBOX */
 .mailbox-section{
   max-width:900px;
   margin:0 auto;
   padding:70px 60px;
   border:1px solid var(--ink);
-  background:#ffffff;
 }
 
 .mailbox-header{
@@ -153,7 +153,6 @@ textarea{
   height:70px;
   border:2px solid var(--ink);
   position:relative;
-  background:#ffffff;
 }
 
 .mailbox::before{
@@ -176,7 +175,6 @@ textarea{
   background:var(--ink);
 }
 
-/* flag reduced */
 .flag{
   position:absolute;
   right:-12px;
@@ -192,15 +190,9 @@ textarea{
   letter-spacing:2px;
 }
 
-/* search */
-.search label{
-  margin-top:20px;
-}
-
 .search button{
   margin-top:34px;
   padding:10px 38px;
-  border-radius:0;
   border:1px solid var(--ink);
   background:#ffffff;
   cursor:pointer;
@@ -214,11 +206,9 @@ textarea{
   color:#fff;
 }
 
-/* letters */
 .letter{
   margin-top:50px;
   padding:50px 46px;
-  background:#ffffff;
   border:1px solid var(--ink);
   box-shadow:0 16px 40px rgba(0,0,0,.12);
   line-height:2;
@@ -238,14 +228,9 @@ textarea{
   color:var(--muted);
 }
 
-/* responsive */
 @media(max-width:700px){
-  .letter-sheet{
-    padding:50px 30px 70px;
-  }
-  .letter-sheet::before{
-    display:none;
-  }
+  .letter-sheet{padding:50px 30px 70px;}
+  .letter-sheet::before{display:none;}
 }
 </style>
 </head>
@@ -254,15 +239,13 @@ textarea{
 
 <h1>UNSAID</h1>
 <div class="subtitle">Letters left without return addresses</div>
+<div class="threshold">This is a quiet place to leave words you could not say.</div>
 
 <div class="letter-sheet">
   <h2>Dear</h2>
 
-  <label>First Name</label>
-  <input id="firstName" placeholder="John">
-
-  <label>Last Name</label>
-  <input id="lastInitial" placeholder="Doe">
+  <label>This letter is for… <span style="text-transform:none">(optional)</span></label>
+  <input id="firstName" placeholder="John Doe">
 
   <label>Letter</label>
   <textarea id="letterText" placeholder="I’ve carried this longer than I should have…"></textarea>
@@ -274,19 +257,13 @@ textarea{
 
 <div class="mailbox-section">
   <div class="mailbox-header">
-    <div class="mailbox">
-      <div class="flag"></div>
-    </div>
+    <div class="mailbox"><div class="flag"></div></div>
     <h2>Mailbox</h2>
   </div>
 
   <div class="search">
-    <label>First Name</label>
-    <input id="searchFirst" placeholder="Jane">
-
-    <label>Last Name</label>
-    <input id="searchLast" placeholder="Doe">
-
+    <label>Search for</label>
+    <input id="searchFirst" placeholder="John Doe">
     <button onclick="searchLetters()">Search</button>
   </div>
 
@@ -303,40 +280,37 @@ function saveLetters(arr){
 }
 
 function submitLetter(){
-  const f=firstName.value.trim();
-  const l=lastInitial.value.trim().toUpperCase();
-  const text=letterText.value.trim();
+  const name = firstName.value.trim() || "John Doe";
+  const text = letterText.value.trim();
 
-  if(!f||!l||!text){
-    alert("All fields are required.");
+  if(!text){
+    alert("The letter cannot be empty.");
     return;
   }
 
-  const letters=getLetters();
+  const letters = getLetters();
   letters.push({
-    first:f.toLowerCase(),
-    last:l,
+    name,
     body:text,
     time:Date.now()
   });
 
   saveLetters(letters);
   letterText.value="";
-  alert("Letter sealed.");
+  alert("Your letter has been placed.");
 }
 
 function searchLetters(){
-  const f=searchFirst.value.trim().toLowerCase();
-  const l=searchLast.value.trim().toUpperCase();
+  const q = searchFirst.value.trim().toLowerCase();
   const box=document.getElementById("results");
   box.innerHTML="";
 
-  if(!f||!l){
-    box.innerHTML="<div class='empty'>Enter a name.</div>";
+  if(!q){
+    box.innerHTML="<div class='empty'>The mailbox is empty.</div>";
     return;
   }
 
-  const matches=getLetters().filter(x=>x.first===f&&x.last===l);
+  const matches = getLetters().filter(x=>x.name.toLowerCase()===q);
 
   if(matches.length===0){
     box.innerHTML="<div class='empty'>The mailbox is empty.</div>";
@@ -349,48 +323,19 @@ function searchLetters(){
       const d=document.createElement("div");
       d.className="letter";
       d.innerHTML=`
-        <div class="nameTag">To ${f.charAt(0).toUpperCase()+f.slice(1)} ${l}.</div>
+        <div class="nameTag">To ${m.name}</div>
         ${m.body.replace(/\n/g,"<br>")}
       `;
       box.appendChild(d);
     });
 }
 </script>
-<footer style="
-  margin-top:80px;
-  padding-top:20px;
-  border-top:1px solid #e5e7eb;
-  text-align:center;
-  font-size:0.85rem;
-  color:#6b7280;
-">
-  <a href="/privacy.html" style="color:inherit; text-decoration:none;">
-    Privacy Policy
-  </a>
+
+<footer style="margin-top:80px;padding-top:20px;border-top:1px solid #e5e7eb;text-align:center;font-size:.85rem;color:#6b7280;">
+  <a href="/privacy.html" style="color:inherit;text-decoration:none;">Privacy Policy</a>
   &nbsp;·&nbsp;
-  <a href="/terms.html" style="color:inherit; text-decoration:none;">
-    Terms & Conditions
-  </a>
+  <a href="/terms.html" style="color:inherit;text-decoration:none;">Terms & Conditions</a>
 </footer>
 
-  <script>
-  window.addEventListener("DOMContentLoaded", function () {
-    const popup = document.getElementById("termsPopup");
-
-    if (!localStorage.getItem("unsaid_terms_seen")) {
-      popup.style.display = "flex";
-    }
-
-    window.acceptTerms = function () {
-      localStorage.setItem("unsaid_terms_seen", "yes");
-      popup.style.display = "none";
-    };
-  });
-</script>
-
-  
 </body>
 </html>
-
-
-
