@@ -410,7 +410,10 @@ function searchLetters(){
   box.innerHTML = "";
 
   if(!q){
-    box.innerHTML = "<div class='empty'>The mailbox is empty.</div>";
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "The mailbox is empty.";
+    box.appendChild(empty);
     return;
   }
 
@@ -419,21 +422,33 @@ function searchLetters(){
   );
 
   if(matches.length === 0){
-    box.innerHTML = "<div class='empty'>The mailbox is empty.</div>";
+    const empty = document.createElement("div");
+    empty.className = "empty";
+    empty.textContent = "The mailbox is empty.";
+    box.appendChild(empty);
     return;
   }
 
   matches
     .sort((a,b) => b.time - a.time)
     .forEach(m => {
-      const d = document.createElement("div");
-      d.className = "letter";
-      d.innerHTML = `
-        <div class="nameTag">To ${m.name}</div>
-        ${m.body.replace(/\n/g,"<br>")}
-      `;
-      box.appendChild(d);
+      const letter = document.createElement("div");
+      letter.className = "letter";
+
+      const nameTag = document.createElement("div");
+      nameTag.className = "nameTag";
+      nameTag.textContent = `To ${m.name}`;
+
+      const body = document.createElement("div");
+      body.style.whiteSpace = "pre-line";
+      body.textContent = m.body;
+
+      letter.appendChild(nameTag);
+      letter.appendChild(body);
+      box.appendChild(letter);
     });
+}
+
 }
 </script>
 
@@ -728,6 +743,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
