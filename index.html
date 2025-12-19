@@ -368,7 +368,6 @@ function submitLetter(){
   const text = letterText.value.trim();
 
   if(!text){
-    alert("The letter cannot be empty.");
     return;
   }
 
@@ -381,7 +380,6 @@ function submitLetter(){
 
   saveLetters(letters);
   letterText.value="";
-  alert("Your letter has been placed.");
 }
 
 function searchLetters(){
@@ -703,6 +701,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
