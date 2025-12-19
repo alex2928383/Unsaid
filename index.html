@@ -383,6 +383,7 @@ textarea{
 <script>
 async function submitLetter() {
   const text = letterText.value.trim();
+  const name = firstName.value.trim() || "anonymous";
   const warning = document.getElementById("emptyWarning");
 
   if (!text) {
@@ -394,7 +395,10 @@ async function submitLetter() {
 
   const { error } = await supabase
     .from("letters")
-    .insert({ content: text });
+    .insert({
+      content: text,
+      recipient: name
+    });
 
   if (error) {
     console.error("Letter failed to save:", error.message);
@@ -402,38 +406,50 @@ async function submitLetter() {
   }
 
   letterText.value = "";
+  firstName.value = "";
   return true;
 }
 
 async function searchLetters() {
-  const q = searchFirst.value.trim();
+  const q = document.getElementById("searchFirst").value.trim();
   const box = document.getElementById("results");
   box.innerHTML = "";
 
   if (!q) {
-    box.innerHTML = `<div class="empty">The mailbox is empty.</div>`;
+    box.innerHTML = `<div class="empty">Whose name are you looking for?</div>`;
     return;
   }
 
   const { data, error } = await supabase
     .from("letters")
-    .select("content, created_at")
+    .select("content, recipient, created_at")
+    .ilike("recipient", `%${q}%`)
     .order("created_at", { ascending: false });
 
-  if (error || !data || data.length === 0) {
-    box.innerHTML = `<div class="empty">The mailbox is empty.</div>`;
+  if (error) {
+    console.error(error);
+    box.innerHTML = `<div class="empty">The mailbox would not open.</div>`;
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    box.innerHTML = `<div class="empty">No letters were left for that name.</div>`;
     return;
   }
 
   data.forEach(l => {
-    if (!l.content.toLowerCase().includes(q.toLowerCase())) return;
-
     const div = document.createElement("div");
     div.className = "letter";
-    div.textContent = l.content;
+
+    div.innerHTML = `
+      <div class="nameTag">For ${l.recipient}</div>
+      <div>${l.content}</div>
+    `;
+
     box.appendChild(div);
   });
 }
+
 </script>
 
   
@@ -615,9 +631,10 @@ async function searchLetters() {
 </style>
 
 <script>
-document.getElementById("sealLetter").addEventListener("click", function () {
-  const allowed = submitLetter();
-  if(!allowed) return;
+document.getElementById("sealLetter").addEventListener("click", async function () {
+  const allowed = await submitLetter();
+  if (!allowed) return;
+
 
 
   const button = this;
@@ -729,6 +746,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
