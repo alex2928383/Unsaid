@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -384,7 +385,7 @@ textarea{
 async function submitLetter() {
   const text = letterText.value.trim();
   const name = firstName.value.trim() || "anonymous";
-  const warning = .getElementById("emptyWarning");
+  const warning = document.getElementById("emptyWarning");
 
   if (!text) {
     warning.style.display = "block";
@@ -411,8 +412,8 @@ async function submitLetter() {
 }
 
 async function searchLetters() {
-  const q = .getElementById("searchFirst").value.trim();
-  const box = .getElementById("results");
+  const q = document.getElementById("searchFirst").value.trim();
+  const box = document.getElementById("results");
   box.innerHTML = "";
 
   if (!q) {
@@ -438,7 +439,7 @@ async function searchLetters() {
   }
 
   data.forEach(l => {
-    const div = .createElement("div");
+    const div = document.createElement("div");
     div.className = "letter";
 
     div.innerHTML = `
@@ -484,7 +485,7 @@ async function searchLetters() {
   ];
 
   /* ---------- BACKGROUND LAYER ---------- */
-  const layer = .createElement("div");
+  const layer = document.createElement("div");
   layer.id = "whisper-layer";
   Object.assign(layer.style, {
     position: "fixed",
@@ -493,10 +494,10 @@ async function searchLetters() {
     pointerEvents: "none",
     zIndex: "0"
   });
-  .body.prepend(layer);
+  document.body.prepend(layer);
 
   /* ---------- FORCE CONTENT ABOVE ---------- */
-  .querySelectorAll(
+  document.querySelectorAll(
     "h1, .subtitle, .threshold, .letter-sheet, .mailbox-section, footer"
   ).forEach(el => {
     el.style.position = "relative";
@@ -506,7 +507,7 @@ async function searchLetters() {
   let started = false;
 
   function spawnWhisper(){
-    const q = .createElement("div");
+    const q = document.createElement("div");
     q.textContent = excerpts[Math.floor(Math.random() * excerpts.length)];
 
     Object.assign(q.style, {
@@ -539,12 +540,12 @@ async function searchLetters() {
     /* ↓ slower appearance rate */
     setInterval(spawnWhisper, 16000);
 
-    .removeEventListener("click", startWhispers);
-    .removeEventListener("touchstart", startWhispers);
+    document.removeEventListener("click", startWhispers);
+    document.removeEventListener("touchstart", startWhispers);
   }
 
-  .addEventListener("click", startWhispers, { once: true });
-  .addEventListener("touchstart", startWhispers, { once: true });
+  document.addEventListener("click", startWhispers, { once: true });
+  document.addEventListener("touchstart", startWhispers, { once: true });
 
 })();
 </script>
@@ -631,43 +632,9 @@ async function searchLetters() {
 </style>
 
 <script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-  const sealBtn = document.getElementById("sealLetter");
-
-  if (!sealBtn) {
-    console.error("Seal button not found");
-    return;
-  }
-
-  sealBtn.addEventListener("click", async function () {
-    const allowed = await submitLetter();
-    if (!allowed) return;
-
-    const button = this;
-    const letter = document.getElementById("letterText");
-    const overlay = document.getElementById("finalRelease");
-
-    if (letter) {
-      letter.readOnly = true;
-      letter.style.transition = "opacity 2.5s ease, filter 2.5s ease";
-      letter.style.opacity = "0.35";
-      letter.style.filter = "blur(2px)";
-    }
-
-    button.disabled = true;
-    button.style.opacity = "0.4";
-    button.style.cursor = "default";
-
-    setTimeout(() => {
-      overlay.style.display = "flex";
-      requestAnimationFrame(() => overlay.style.opacity = "1");
-      typeSequence();
-    }, 2000);
-  });
-});
-</script>
+document.getElementById("sealLetter").addEventListener("click", async function () {
+  const allowed = await submitLetter();
+  if (!allowed) return;
 
 
 
@@ -771,6 +738,13 @@ function typeSequence() {
 </script>
 
 
+
+
 </body>
 </html>
+
+
+
+
+
 
