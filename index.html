@@ -332,7 +332,7 @@ textarea{
 
   <div class="signature">— unsigned</div>
 
-  <button class="seal" onclick="submitLetter()">Seal Letter</button>
+<button class="seal" id="sealLetter">Seal Letter</button>
 </div>
 
 <div class="mailbox-section">
@@ -510,6 +510,192 @@ const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
 
 })();
 </script>
+</footer>
+
+ 
+
+<!-- Release Overlay -->
+<div id="finalRelease" style="
+  position:fixed;
+  inset:0;
+  background:#ffffff;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  font-family: Georgia, 'Times New Roman', serif;
+  color:#333;
+  opacity:0;
+  transition: opacity 3s ease;
+  z-index:999;
+">
+  <div id="typedContainer" style="
+    max-width:520px;
+    line-height:1.9;
+    font-size:1rem;
+  ">
+    <p id="line1wrap">
+      <span id="line1"></span><span class="caret"></span>
+    </p>
+    <p id="line2wrap" style="margin-top:20px;">
+      <span id="line2"></span>
+    </p>
+    <p id="line3wrap" style="margin-top:26px; font-size:.85rem; color:#777;">
+      <span id="line3"></span>
+    </p>
+  </div>
+</div>
+
+<!-- Blackout -->
+<div id="blackout" style="
+  position:fixed;
+  inset:0;
+  background:#000;
+  opacity:0;
+  pointer-events:none;
+  z-index:10000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transition:opacity 2.5s ease;
+">
+  <span style="
+    color:#e5e5e5;
+    font-family:Georgia,'Times New Roman',serif;
+    font-size:.9rem;
+    letter-spacing:.4px;
+    opacity:0;
+    transition:opacity 1.6s ease;
+  ">
+    come back anytime
+  </span>
+</div>
+
+<style>
+.caret{
+  display:inline-block;
+  width:8px;
+  margin-left:2px;
+  border-right:1px solid #444;
+  animation: blink 1.1s steps(2,start) infinite;
+}
+
+@keyframes blink{
+  0%{opacity:1}
+  50%{opacity:0}
+  100%{opacity:1}
+}
+
+.chaos-letter{
+  display:inline-block;
+  will-change:transform, opacity;
+}
+</style>
+
+<script>
+document.getElementById("sealLetter").addEventListener("click", function () {
+  submitLetter();
+
+  const button = this;
+  const letter = document.getElementById("letterText");
+  const overlay = document.getElementById("finalRelease");
+
+  if (letter) {
+    letter.readOnly = true;
+    letter.style.transition = "opacity 2.5s ease, filter 2.5s ease";
+    letter.style.opacity = "0.35";
+    letter.style.filter = "blur(2px)";
+  }
+
+  button.disabled = true;
+  button.style.opacity = "0.4";
+  button.style.cursor = "default";
+
+  setTimeout(() => {
+    overlay.style.display = "flex";
+    requestAnimationFrame(() => overlay.style.opacity = "1");
+    typeSequence();
+  }, 2000);
+});
+
+function typeText(el, text, speed, done) {
+  let i = 0;
+  const interval = setInterval(() => {
+    el.textContent += text.charAt(i);
+    i++;
+    if (i >= text.length) {
+      clearInterval(interval);
+      if (done) done();
+    }
+  }, speed);
+}
+
+function shatter(element){
+  const text = element.textContent;
+  element.textContent = "";
+
+  [...text].forEach(char => {
+    const span = document.createElement("span");
+    span.className = "chaos-letter";
+    span.textContent = char === " " ? "\u00A0" : char;
+    element.appendChild(span);
+  });
+
+  setTimeout(() => {
+    element.querySelectorAll(".chaos-letter").forEach(letter => {
+      const x = (Math.random() - .5) * 1200;
+      const y = (Math.random() - .5) * 900;
+      const r = (Math.random() - .5) * 720;
+
+      letter.style.transition =
+        "transform 1.8s cubic-bezier(.2,.8,.2,1), opacity 1.8s ease";
+      letter.style.transform = `translate(${x}px,${y}px) rotate(${r}deg)`;
+      letter.style.opacity = "0";
+    });
+  }, 300);
+}
+
+function typeSequence() {
+  const l1 = document.getElementById("line1");
+  const l2 = document.getElementById("line2");
+  const l3 = document.getElementById("line3");
+  const caret = document.querySelector(".caret");
+
+  typeText(l1, "This letter is no longer yours.", 45, () => {
+    setTimeout(() => {
+      caret.remove();
+      typeText(l2, "It has been sealed without witness.", 45, () => {
+        setTimeout(() => {
+          typeText(l3, "Whatever it carried has been released.", 40);
+        }, 900);
+      });
+    }, 900);
+  });
+
+  // CHAOS EXIT
+  setTimeout(() => {
+    shatter(l1);
+    shatter(l2);
+    shatter(l3);
+  }, 12000);
+
+  // BLACKOUT
+  setTimeout(() => {
+    const blackout = document.getElementById("blackout");
+    blackout.style.opacity = "1";
+    setTimeout(() => {
+      blackout.querySelector("span").style.opacity = "1";
+    }, 900);
+  }, 15000);
+
+  // EJECT
+  setTimeout(() => {
+    window.location.replace("about:blank");
+  }, 20000);
+}
+</script>
+
+
 
 
 
@@ -517,6 +703,7 @@ const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
 
 </body>
 </html>
+
 
 
 
