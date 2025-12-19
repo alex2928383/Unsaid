@@ -14,7 +14,7 @@
 
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" href="/favicon.png">
-</head>
+
 
 
 <style>
@@ -369,18 +369,17 @@ textarea{
 
 <script>
 function getLetters(){
-  return JSON.parse(localStorage.getItem("unsaid_letters")||"[]");
+  return JSON.parse(localStorage.getItem("unsaid_letters") || "[]");
 }
 
 function saveLetters(arr){
-  localStorage.setItem("unsaid_letters",JSON.stringify(arr));
+  localStorage.setItem("unsaid_letters", JSON.stringify(arr));
 }
 
 function normalizeName(str){
   return str.toLowerCase().replace(/\s+/g," ").trim();
 }
 
-<script>
 function submitLetter(){
   const name = firstName.value.trim() || "John Doe";
   const text = letterText.value.trim();
@@ -388,7 +387,7 @@ function submitLetter(){
 
   if(!text){
     warning.style.display = "block";
-    return false; // IMPORTANT: stops the ritual
+    return false;
   }
 
   warning.style.display = "none";
@@ -396,41 +395,40 @@ function submitLetter(){
   const letters = getLetters();
   letters.push({
     name,
-    body:text,
-    time:Date.now()
+    body: text,
+    time: Date.now()
   });
 
   saveLetters(letters);
-  letterText.value="";
+  letterText.value = "";
   return true;
 }
-</script>
-
 
 function searchLetters(){
   const q = normalizeName(searchFirst.value);
-  const box=document.getElementById("results");
-  box.innerHTML="";
+  const box = document.getElementById("results");
+  box.innerHTML = "";
 
   if(!q){
-    box.innerHTML="<div class='empty'>The mailbox is empty.</div>";
+    box.innerHTML = "<div class='empty'>The mailbox is empty.</div>";
     return;
   }
 
-const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
+  const matches = getLetters().filter(
+    x => x.name && normalizeName(x.name) === q
+  );
 
-  
-  if(matches.length===0){
-    box.innerHTML="<div class='empty'>The mailbox is empty.</div>";
+  if(matches.length === 0){
+    box.innerHTML = "<div class='empty'>The mailbox is empty.</div>";
     return;
   }
 
   matches
-    .sort((a,b)=>b.time-a.time)
-    .forEach(m=>{
-      const d=document.createElement("div");
-      d.className="letter";
-      d.innerHTML=`
+    .sort((a,b) => b.time - a.time)
+    .forEach(m => {
+      const d = document.createElement("div");
+      d.className = "letter";
+      d.innerHTML = `
         <div class="nameTag">To ${m.name}</div>
         ${m.body.replace(/\n/g,"<br>")}
       `;
@@ -438,6 +436,8 @@ const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
     });
 }
 </script>
+
+  
 
 <footer style="margin-top:80px;padding-top:20px;border-top:1px solid #e5e7eb;text-align:center;font-size:.85rem;color:#6b7280;">
   <a href="/note.html" style="color:inherit;text-decoration:none;">Note from the Creator</a>
@@ -728,6 +728,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
