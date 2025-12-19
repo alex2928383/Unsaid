@@ -20,7 +20,7 @@
   const SUPABASE_URL = "https://bwmvraswkesolsaybokv.supabase.co";
   const SUPABASE_ANON_KEY = "sb_publishable_8ROrfyQn3NkpS9Fqvvx80A_QYWVtuCS";
 
-  const supabase = supabase.createClient(
+  const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_ANON_KEY
   );
@@ -379,9 +379,13 @@ textarea{
 
 <script>
 async function submitLetter(){
+  const firstName = document.getElementById("firstName");
+  const letterText = document.getElementById("letterText");
+  const warning = document.getElementById("emptyWarning");
+
   const name = firstName.value.trim() || "John Doe";
   const text = letterText.value.trim();
-  const warning = document.getElementById("emptyWarning");
+
 
   if(!text){
     warning.style.display = "block";
@@ -390,7 +394,7 @@ async function submitLetter(){
 
   warning.style.display = "none";
 
-  const { error } = await supabase
+  const { error } = await supabaseClient
     .from("letters")
     .insert({
       recipient: name,
@@ -398,7 +402,7 @@ async function submitLetter(){
     });
 
   if(error){
-    console.error("Supabase insert failed:", error.message);
+    console.error("supabaseClient insert failed:", error.message);
     return false;
   }
 
@@ -419,10 +423,10 @@ async function searchLetters(){
     return;
   }
 
-  const { data, error } = await supabase
+  const { data, error } = await supabaseClient
     .from("letters")
     .select("recipient, content, created_at")
-    .ilike("recipient", q)
+    .ilike("recipient", `%${q}%`)
     .order("created_at", { ascending: false });
 
   if(error || !data || data.length === 0){
@@ -746,6 +750,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
