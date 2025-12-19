@@ -242,6 +242,78 @@ textarea{
 
 <body>
 
+  <!-- WELCOME OVERLAY (ONE-TIME ONBOARDING) -->
+<div id="welcomeOverlay" role="dialog" aria-labelledby="welcomeText">
+  <div class="welcome-box">
+    <p id="welcomeText">
+      Welcome to <strong>UNSAID</strong>.<br><br>
+      This is a quiet place to leave words you never got to say.<br>
+      When you’re ready, write your letter and press and hold to release it.
+    </p>
+    <button id="welcomeBtn">enter</button>
+  </div>
+</div>
+
+<style>
+  #welcomeOverlay{
+    position:fixed;
+    inset:0;
+    background:rgba(255,255,255,.96);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+  }
+
+  .welcome-box{
+    max-width:420px;
+    text-align:center;
+    font-family:"Times New Roman", Times, serif;
+    color:#111;
+    line-height:1.8;
+  }
+
+  .welcome-box p{
+    font-size:.95rem;
+    margin-bottom:30px;
+  }
+
+  #welcomeBtn{
+    padding:10px 32px;
+    border:1px solid #000;
+    background:#fff;
+    font-family:inherit;
+    letter-spacing:2px;
+    font-size:.7rem;
+    text-transform:uppercase;
+    cursor:pointer;
+  }
+
+  #welcomeBtn:hover{
+    background:#000;
+    color:#fff;
+  }
+</style>
+
+<script>
+(function(){
+  const overlay = document.getElementById("welcomeOverlay");
+  const btn = document.getElementById("welcomeBtn");
+
+  if(localStorage.getItem("unsaid_welcomed")){
+    overlay.remove();
+    return;
+  }
+
+  btn.addEventListener("click", () => {
+    localStorage.setItem("unsaid_welcomed", "true");
+    overlay.style.opacity = "0";
+    setTimeout(() => overlay.remove(), 400);
+  });
+})();
+</script>
+
+
 <h1>UNSAID</h1>
 <div class="subtitle">Letters left without return addresses</div>
 <div class="threshold">This is a quiet place to leave words you could not say.</div>
@@ -445,6 +517,7 @@ const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
 
 </body>
 </html>
+
 
 
 
