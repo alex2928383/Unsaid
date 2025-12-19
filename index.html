@@ -318,6 +318,18 @@ textarea{
 })();
 </script>
 
+  <!-- 🔑 SUPABASE SETUP (MUST LOAD BEFORE LETTER LOGIC) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://bwmvraswkesolsaybokv.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_8ROrfyQn3NkpS9Fqvvx80A_QYWVtuCS";
+
+  const supabase = supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+</script>
+
 
 <h1>UNSAID</h1>
 <div class="subtitle">Letters left without return addresses</div>
@@ -367,88 +379,61 @@ textarea{
   <div id="results"></div>
 </div>
 
+
 <script>
-function getLetters(){
-  return JSON.parse(localStorage.getItem("unsaid_letters") || "[]");
-}
-
-function saveLetters(arr){
-  localStorage.setItem("unsaid_letters", JSON.stringify(arr));
-}
-
-function normalizeName(str){
-  return str.toLowerCase().replace(/\s+/g," ").trim();
-}
-
-function submitLetter(){
-  const name = firstName.value.trim() || "John Doe";
+async function submitLetter() {
   const text = letterText.value.trim();
   const warning = document.getElementById("emptyWarning");
 
-  if(!text){
+  if (!text) {
     warning.style.display = "block";
     return false;
   }
 
   warning.style.display = "none";
 
-  const letters = getLetters();
-  letters.push({
-    name,
-    body: text,
-    time: Date.now()
-  });
+  const { error } = await supabase
+    .from("letters")
+    .insert({ content: text });
 
-  saveLetters(letters);
+  if (error) {
+    console.error("Letter failed to save:", error.message);
+    return false;
+  }
+
   letterText.value = "";
   return true;
 }
 
-function searchLetters(){
-  const q = normalizeName(searchFirst.value);
+async function searchLetters() {
+  const q = searchFirst.value.trim();
   const box = document.getElementById("results");
   box.innerHTML = "";
 
-  if(!q){
-    const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.textContent = "The mailbox is empty.";
-    box.appendChild(empty);
+  if (!q) {
+    box.innerHTML = `<div class="empty">The mailbox is empty.</div>`;
     return;
   }
 
-  const matches = getLetters().filter(
-    x => x.name && normalizeName(x.name) === q
-  );
+  const { data, error } = await supabase
+    .from("letters")
+    .select("content, created_at")
+    .order("created_at", { ascending: false });
 
-  if(matches.length === 0){
-    const empty = document.createElement("div");
-    empty.className = "empty";
-    empty.textContent = "The mailbox is empty.";
-    box.appendChild(empty);
+  if (error || !data || data.length === 0) {
+    box.innerHTML = `<div class="empty">The mailbox is empty.</div>`;
     return;
   }
 
-  matches
-    .sort((a,b) => b.time - a.time)
-    .forEach(m => {
-      const letter = document.createElement("div");
-      letter.className = "letter";
+  data.forEach(l => {
+    if (!l.content.toLowerCase().includes(q.toLowerCase())) return;
 
-      const nameTag = document.createElement("div");
-      nameTag.className = "nameTag";
-      nameTag.textContent = `To ${m.name}`;
-
-      const body = document.createElement("div");
-      body.style.whiteSpace = "pre-line";
-      body.textContent = m.body;
-
-      letter.appendChild(nameTag);
-      letter.appendChild(body);
-      box.appendChild(letter);
-    });
+    const div = document.createElement("div");
+    div.className = "letter";
+    div.textContent = l.content;
+    box.appendChild(div);
+  });
 }
-
 </script>
 
   
@@ -738,10 +723,13 @@ function typeSequence() {
 
 
 
+</script>
+
 
 
 </body>
 </html>
+
 
 
 
