@@ -350,9 +350,59 @@ const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
   &nbsp;·&nbsp;
   <a href="/terms.html" style="color:inherit;text-decoration:none;">Terms & Conditions</a>
 
+  <script>
+setInterval(() => {
+  const excerpts = [
+    "“I stayed longer than I should have because leaving felt like admitting the damage was real.”",
+    "“I thought time would soften this, but it mostly taught me how to carry it quietly.”",
+    "“I carry this differently now, but it hasn’t gotten lighter.”",
+    "“I survived the part of my life where you mattered the most.”",
+
+    "“There are conversations I still rehearse, even though I know they’ll never happen.”",
+    "“Some parts of my life make sense only if I don’t mention you.”",
+    "“I don’t talk about you much anymore, but you still influence the way I make decisions.”",
+    "“I stopped waiting for you to understand because I needed to keep moving.”",
+
+    "“I changed myself slowly enough that no one noticed, including me.”",
+    "“There are things I learned from you that I wish I didn’t know how to survive.”",
+    "“I learned how to be careful in ways I didn’t need before you.”",
+
+    "“I don’t feel angry anymore, which somehow feels worse.”",
+    "“I forgave you privately so I could stop explaining myself.”",
+    "“What hurt the most wasn’t what happened, but how normal it eventually felt.”",
+
+    "“I don’t miss you exactly; I miss what I thought this would become.”",
+    "“I survived what I couldn’t explain, and that still feels unfinished.”"
+  ];
+
+  const q = document.createElement("div");
+  q.textContent = excerpts[Math.floor(Math.random() * excerpts.length)];
+
+  q.style.position = "fixed";
+  q.style.top = Math.random() * 100 + "vh";
+  q.style.left = "-30vw";
+  q.style.fontSize = "0.85rem";
+  q.style.fontStyle = "italic";
+  q.style.color = "rgba(0,0,0,0.04)";
+  q.style.pointerEvents = "none";
+  q.style.zIndex = "0";
+  q.style.whiteSpace = "nowrap";
+  q.style.transition = "transform 40s linear";
+
+  document.body.appendChild(q);
+
+  requestAnimationFrame(() => {
+    q.style.transform = "translateX(140vw)";
+  });
+
+  setTimeout(() => q.remove(), 42000);
+}, 7000);
+</script>
+
 
 </body>
 </html>
+
 
 
 
