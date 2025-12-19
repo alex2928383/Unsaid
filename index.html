@@ -378,19 +378,7 @@ textarea{
 </div>
 
 <script>
-function getLetters(){
-  return JSON.parse(localStorage.getItem("unsaid_letters") || "[]");
-}
-
-function saveLetters(arr){
-  localStorage.setItem("unsaid_letters", JSON.stringify(arr));
-}
-
-function normalizeName(str){
-  return str.toLowerCase().replace(/\s+/g," ").trim();
-}
-
-function submitLetter(){
+async function submitLetter(){
   const name = firstName.value.trim() || "John Doe";
   const text = letterText.value.trim();
   const warning = document.getElementById("emptyWarning");
@@ -402,20 +390,24 @@ function submitLetter(){
 
   warning.style.display = "none";
 
-  const letters = getLetters();
-  letters.push({
-    name,
-    body: text,
-    time: Date.now()
-  });
+  const { error } = await supabase
+    .from("letters")
+    .insert({
+      recipient: name,
+      content: text
+    });
 
-  saveLetters(letters);
+  if(error){
+    console.error("Supabase insert failed:", error.message);
+    return false;
+  }
+
   letterText.value = "";
   return true;
 }
 
-function searchLetters(){
-  const q = normalizeName(searchFirst.value);
+async function searchLetters(){
+  const q = searchFirst.value.trim();
   const box = document.getElementById("results");
   box.innerHTML = "";
 
@@ -427,37 +419,38 @@ function searchLetters(){
     return;
   }
 
-  const matches = getLetters().filter(
-    x => x.name && normalizeName(x.name) === q
-  );
+  const { data, error } = await supabase
+    .from("letters")
+    .select("recipient, content, created_at")
+    .ilike("recipient", q)
+    .order("created_at", { ascending: false });
 
-  if(matches.length === 0){
+  if(error || !data || data.length === 0){
     const empty = document.createElement("div");
     empty.className = "empty";
-    empty.textContent = "The mailbox is empty.";
+    empty.textContent = "No letters were left for that name.";
     box.appendChild(empty);
     return;
   }
 
-  matches
-    .sort((a,b) => b.time - a.time)
-    .forEach(m => {
-      const letter = document.createElement("div");
-      letter.className = "letter";
+  data.forEach(l => {
+    const letter = document.createElement("div");
+    letter.className = "letter";
 
-      const nameTag = document.createElement("div");
-      nameTag.className = "nameTag";
-      nameTag.textContent = `To ${m.name}`;
+    const nameTag = document.createElement("div");
+    nameTag.className = "nameTag";
+    nameTag.textContent = `To ${l.recipient}`;
 
-      const body = document.createElement("div");
-      body.style.whiteSpace = "pre-line";
-      body.textContent = m.body;
+    const body = document.createElement("div");
+    body.style.whiteSpace = "pre-line";
+    body.textContent = l.content;
 
-      letter.appendChild(nameTag);
-      letter.appendChild(body);
-      box.appendChild(letter);
-    });
+    letter.appendChild(nameTag);
+    letter.appendChild(body);
+    box.appendChild(letter);
+  });
 }
+
 
 </script>
 
@@ -640,9 +633,10 @@ function searchLetters(){
 </style>
 
 <script>
-document.getElementById("sealLetter").addEventListener("click", function () {
-  const allowed = submitLetter();
+document.getElementById("sealLetter").addEventListener("click", async function () {
+  const allowed = await submitLetter();
   if(!allowed) return;
+
 
 
   const button = this;
@@ -752,6 +746,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
