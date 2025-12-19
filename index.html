@@ -260,8 +260,128 @@ textarea{
 
   <div class="signature">— unsigned</div>
 
-  <button class="seal" onclick="submitLetter()">Seal Letter</button>
+  <button id="sealBtn" aria-label="Release letter">
+  <span class="label">SEAL LETTER</span>
+  <span class="hint">press and hold</span>
+</button>
+
 </div>
+  <!-- SEAL / RELEASE RITUAL -->
+<style>
+  body.releasing{
+    opacity:0;
+    transition:opacity .3s ease;
+  }
+
+  body.released{
+    opacity:1;
+    transition:opacity .6s ease;
+  }
+
+  #sealBtn{
+    position: relative;
+    display: block;
+    margin: 30px auto 10px;
+    padding: 14px 36px;
+    background: transparent;
+    border: 1px solid #d1d5db;
+    color: #111;
+    font-family: Georgia, "Times New Roman", serif;
+    letter-spacing: .25em;
+    font-size: .75rem;
+    cursor: pointer;
+    transition: opacity .4s ease, border-color .4s ease;
+  }
+
+  #sealBtn .label{
+    display:block;
+  }
+
+  #sealBtn .hint{
+    display:block;
+    margin-top:6px;
+    font-size:.65rem;
+    letter-spacing:.1em;
+    color:#9ca3af;
+  }
+
+  #sealBtn:hover{
+    opacity:.75;
+  }
+
+  #sealBtn.holding{
+    opacity:.4;
+  }
+
+  #sealBtn.sealed{
+    border-color:#9ca3af;
+    opacity:.6;
+    cursor:default;
+  }
+
+  #sealBtn.sealed .label{
+    letter-spacing:.35em;
+  }
+
+  #sealBtn.sealed .hint{
+    display:none;
+  }
+</style>
+
+
+<script>
+(function(){
+  const btn = document.getElementById("sealBtn");
+  if(!btn) return;
+
+  const hintSeen = localStorage.getItem("unsaid_hint_seen");
+  let holdTimer;
+
+  if(hintSeen){
+    const hint = btn.querySelector(".hint");
+    if(hint) hint.style.display = "none";
+  }
+
+  btn.addEventListener("mousedown", startHold);
+  btn.addEventListener("touchstart", startHold);
+
+  btn.addEventListener("mouseup", cancelHold);
+  btn.addEventListener("mouseleave", cancelHold);
+  btn.addEventListener("touchend", cancelHold);
+
+  function startHold(){
+    if(btn.classList.contains("sealed")) return;
+
+    btn.classList.add("holding");
+    localStorage.setItem("unsaid_hint_seen", "true");
+
+    holdTimer = setTimeout(() => {
+      btn.classList.remove("holding");
+      btn.classList.add("sealed");
+      btn.querySelector(".label").textContent = "RELEASED";
+
+      document.body.classList.add("releasing");
+
+      setTimeout(() => {
+        document.body.classList.remove("releasing");
+        document.body.classList.add("released");
+
+        // 🔒 call your existing submit logic here
+        submitLetter();
+
+
+      }, 300);
+
+    }, 800);
+  }
+
+  function cancelHold(){
+    clearTimeout(holdTimer);
+    btn.classList.remove("holding");
+  }
+})();
+</script>
+
 
 <div class="mailbox-section">
   <div class="mailbox-header">
@@ -445,13 +565,3 @@ const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
