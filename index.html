@@ -334,6 +334,18 @@ textarea{
 
   <label>Letter</label>
   <textarea id="letterText" placeholder="I’ve carried this longer than I should have…"></textarea>
+<div
+  id="emptyWarning"
+  style="
+    display:none;
+    margin-top:14px;
+    font-size:.75rem;
+    color:#6b7280;
+    font-style:italic;
+  "
+>
+  An empty letter cannot be released.
+</div>
 
   <div class="signature">— unsigned</div>
 
@@ -368,13 +380,18 @@ function normalizeName(str){
   return str.toLowerCase().replace(/\s+/g," ").trim();
 }
 
+<script>
 function submitLetter(){
   const name = firstName.value.trim() || "John Doe";
   const text = letterText.value.trim();
+  const warning = document.getElementById("emptyWarning");
 
   if(!text){
-    return;
+    warning.style.display = "block";
+    return false; // IMPORTANT: stops the ritual
   }
+
+  warning.style.display = "none";
 
   const letters = getLetters();
   letters.push({
@@ -385,7 +402,10 @@ function submitLetter(){
 
   saveLetters(letters);
   letterText.value="";
+  return true;
 }
+</script>
+
 
 function searchLetters(){
   const q = normalizeName(searchFirst.value);
@@ -597,7 +617,9 @@ const matches = getLetters().filter(x=>x.name && normalizeName(x.name)===q);
 
 <script>
 document.getElementById("sealLetter").addEventListener("click", function () {
-  submitLetter();
+  const allowed = submitLetter();
+  if(!allowed) return;
+
 
   const button = this;
   const letter = document.getElementById("letterText");
@@ -706,19 +728,6 @@ function typeSequence() {
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
