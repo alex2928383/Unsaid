@@ -1,99 +1,106 @@
-<a href="javascript:history.back()" style="
-  display:block;
-  max-width:640px;
-  margin:40px auto 20px;
-  font-size:.8rem;
-  color:#9ca3af;
-  text-decoration:none;
-">
-  ← back
-</a>
-
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Note for Creator | Unsaid</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Allura&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Allura&display=swap" rel="stylesheet">
 
-<section class="creator-note">
-  <p>I built this space because silence needed somewhere to go.</p>
+  <style>
+    .back-link {
+      display: block;
+      max-width: 640px;
+      margin: 20px auto 40px;
+      font-size: 0.8rem;
+      color: #737d8c;
+      text-decoration: none;
+      text-align: left;
+    }
 
-  <p>
-    <em>Unsaid</em> is not here to fix anything. It doesn’t promise closure,
-    forgiveness, or relief. It exists because some words arrive too late,
-    or too early, or in pieces sharp enough to cut their owner.
-  </p>
+    .creator-note {
+      max-width: 640px;
+      margin: 0 auto 100px;
+      padding: 48px 42px;
+      font-family: 'Nothing You Could Do', cursive;
+      color: #1a1a1a;
+      font-size: 0.95rem;
+      line-height: 1.9;
 
-  <p>This is a place to leave them anyway.</p>
+      background: 
+        linear-gradient(
+          rgba(255,255,255,0.94),
+          rgba(255,255,255,0.94)
+        ),
+        repeating-linear-gradient(
+          0deg,
+          rgba(0,0,0,0.015),
+          rgba(0,0,0,0.015) 1px,
+          transparent 1px,
+          transparent 4px
+        );
 
-  <p>
-    No names are required. No explanations either. You don’t have to be brave here.
-    You don’t have to be kind. You only have to be honest enough to set the weight down.
-  </p>
+      border: 1px solid #e5e5e5;
+      box-shadow:
+        0 12px 30px rgba(0,0,0,0.08),
+        0 2px 6px rgba(0,0,0,0.05);
+    }
 
-  <p>
-    Some letters are love. Some are grief. Some are anger that never learned how to speak.
-    All of them are allowed.
-  </p>
+    .creator-note p {
+      margin-bottom: 22px;
+    }
 
-  <p>
-    I don’t read these to judge them. I read them to witness them.
-  </p>
+    .creator-note em {
+      font-style: italic;
+    }
 
-  <p>
-    What you leave here doesn’t disappear — but it doesn’t follow you, either.
-  </p>
+    .creator-note .signature {
+      margin-top: 40px;
+      font-family: 'Allura', cursive;
+      font-size: 1.6rem;
+      text-align: right;
+      letter-spacing: 0.15px;
+      color: #1a1a1a;
+    }
+  </style>
+</head>
 
-  <p class="signature">— Alex M</p>
-</section>
+<body>
 
-<style>
-.creator-note {
-  max-width: 640px;
-  margin: 100px auto;
-  padding: 48px 42px;
-  font-family: 'Nothing You Could Do', cursive;
-  color: #1a1a1a;
-  font-size: 0.95rem;
-  line-height: 1.9;
+  <!-- Back link (now correctly placed) -->
+  <a href="javascript:history.back()" class="back-link">← back</a>
 
-  background: 
-    linear-gradient(
-      rgba(255,255,255,0.94),
-      rgba(255,255,255,0.94)
-    ),
-    repeating-linear-gradient(
-      0deg,
-      rgba(0,0,0,0.015),
-      rgba(0,0,0,0.015) 1px,
-      transparent 1px,
-      transparent 4px
-    );
+  <section class="creator-note">
+    <p>I built this space because silence needed somewhere to go.</p>
 
-  border: 1px solid #e5e5e5;
-  box-shadow:
-    0 12px 30px rgba(0,0,0,0.08),
-    0 2px 6px rgba(0,0,0,0.05);
-}
+    <p>
+      <em>Unsaid</em> is not here to fix anything. It doesn’t promise closure,
+      forgiveness, or relief. It exists because some words arrive too late,
+      or too early, or in pieces sharp enough to cut their owner.
+    </p>
 
-.creator-note p {
-  margin-bottom: 22px;
-}
+    <p>This is a place to leave them anyway.</p>
 
-.creator-note em {
-  font-style: italic;
-}
-.creator-note .signature {
-  margin-top: 40px;
-  font-family: 'Allura', cursive;
-  font-size: 1.6rem;
-  text-align: right;
-  letter-spacing: 0.15px;
-  color: #1a1a1a;
-}
+    <p>
+      No names are required. No explanations either. You don’t have to be brave here.
+      You don’t have to be kind. You only have to be honest enough to set the weight down.
+    </p>
 
+    <p>
+      Some letters are love. Some are grief. Some are anger that never learned how to speak.
+      All of them are allowed.
+    </p>
 
-}
-</style>
+    <p>
+      I don’t read these to judge them. I read them to witness them.
+    </p>
+
+    <p>
+      What you leave here doesn’t disappear — but it doesn’t follow you, either.
+    </p>
+
+    <p class="signature">— Alex M</p>
+  </section>
+
+</body>
+</html>
