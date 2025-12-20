@@ -719,35 +719,42 @@ function typeSequence() {
   typeText(l1, "This letter is no longer yours.", 28, () => {
     setTimeout(() => {
       caret.remove();
+
       typeText(l2, "It has been sealed without witness.", 28, () => {
         setTimeout(() => {
-          typeText(l3, "Whatever it carried has been released.", 26);
-        }, 900);
+
+          typeText(l3, "Whatever it carried has been released.", 26, () => {
+
+            // 🔥 EXPLODE ALMOST IMMEDIATELY AFTER FINAL LINE
+            setTimeout(() => {
+              shatter(l1);
+              shatter(l2);
+              shatter(l3);
+            }, 400);
+
+            // BLACKOUT FOLLOWS THE SHATTER
+            setTimeout(() => {
+              const blackout = document.getElementById("blackout");
+              blackout.style.opacity = "1";
+              setTimeout(() => {
+                blackout.querySelector("span").style.opacity = "1";
+              }, 500);
+            }, 1800);
+
+            // EJECT
+            setTimeout(() => {
+              window.location.replace("about:blank");
+            }, 4500);
+
+          });
+
+        }, 350);
       });
-    }, 900);
+
+    }, 350);
   });
-
-  // CHAOS EXIT
-  setTimeout(() => {
-    shatter(l1);
-    shatter(l2);
-    shatter(l3);
-  }, 8000);
-
-  // BLACKOUT
-  setTimeout(() => {
-    const blackout = document.getElementById("blackout");
-    blackout.style.opacity = "1";
-    setTimeout(() => {
-      blackout.querySelector("span").style.opacity = "1";
-    }, 500);
-  }, 10500);
-
-  // EJECT
-  setTimeout(() => {
-    window.location.replace("about:blank");
-  }, 14000);
 }
+
 </script>
 
 
@@ -758,6 +765,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
