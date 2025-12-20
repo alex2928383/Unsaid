@@ -411,8 +411,9 @@ async function submitLetter(){
 }
 
 async function searchLetters(){
-  const q = searchFirst.value.trim();
-  const box = document.getElementById("results");
+  const input = document.getElementById("searchFirst");
+const q = input.value.trim();
+ const box = document.getElementById("results");
   box.innerHTML = "";
 
   if(!q){
@@ -426,7 +427,7 @@ async function searchLetters(){
   const { data, error } = await supabaseClient
     .from("letters")
     .select("recipient, content, created_at")
-    .ilike("recipient", `%${q}%`)
+    .eq("recipient", q)
     .order("created_at", { ascending: false });
 
   if(error || !data || data.length === 0){
@@ -765,6 +766,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
