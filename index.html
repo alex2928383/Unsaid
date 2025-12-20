@@ -578,7 +578,7 @@ async function searchLetters(){
   font-family: Georgia, 'Times New Roman', serif;
   color:#333;
   opacity:0;
-  transition: opacity 3s ease;
+  transition: opacity 1.6s ease;
   z-index:999;
 ">
   <div id="typedContainer" style="
@@ -716,12 +716,12 @@ function typeSequence() {
   const l3 = document.getElementById("line3");
   const caret = document.querySelector(".caret");
 
-  typeText(l1, "This letter is no longer yours.", 45, () => {
+  typeText(l1, "This letter is no longer yours.", 28, () => {
     setTimeout(() => {
       caret.remove();
-      typeText(l2, "It has been sealed without witness.", 45, () => {
+      typeText(l2, "It has been sealed without witness.", 28, () => {
         setTimeout(() => {
-          typeText(l3, "Whatever it carried has been released.", 40);
+          typeText(l3, "Whatever it carried has been released.", 26);
         }, 900);
       });
     }, 900);
@@ -732,7 +732,7 @@ function typeSequence() {
     shatter(l1);
     shatter(l2);
     shatter(l3);
-  }, 12000);
+  }, 8000);
 
   // BLACKOUT
   setTimeout(() => {
@@ -740,13 +740,13 @@ function typeSequence() {
     blackout.style.opacity = "1";
     setTimeout(() => {
       blackout.querySelector("span").style.opacity = "1";
-    }, 900);
-  }, 15000);
+    }, 500);
+  }, 10500);
 
   // EJECT
   setTimeout(() => {
     window.location.replace("about:blank");
-  }, 20000);
+  }, 14000);
 }
 </script>
 
@@ -758,6 +758,7 @@ function typeSequence() {
 
 </body>
 </html>
+
 
 
 
