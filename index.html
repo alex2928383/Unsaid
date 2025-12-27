@@ -382,6 +382,17 @@ textarea{
   </div>
 
   <div id="results"></div>
+  <!-- AdSense Slot (loads only after a letter exists) -->
+<div id="adsense-slot" style="display:none; margin:80px auto; max-width:760px;">
+  <ins class="adsbygoogle"
+       style="display:block"
+       data-ad-client="ca-pub-5981336162783121"
+       data-ad-slot="4174450584"
+       data-ad-format="auto"
+       data-full-width-responsive="true"></ins>
+</div>
+
+
 </div>
 
 <script>
@@ -568,7 +579,6 @@ const q = input.value.trim();
 
 })();
 </script>
-</footer>
 
  
 
@@ -762,6 +772,54 @@ function typeSequence() {
 </script>
 
 
+<script>
+(function(){
+  let adsLoaded = false;
+
+  function letterIsVisible(){
+    const letters = document.querySelectorAll(".letter");
+    if(!letters.length) return false;
+
+    return [...letters].some(l =>
+      l.textContent && l.textContent.trim().length > 300
+    );
+  }
+
+  function loadAdSense(){
+    if(adsLoaded) return;
+    adsLoaded = true;
+
+    const script = document.createElement("script");
+    script.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js";
+    script.async = true;
+
+    script.onload = () => {
+      const slot = document.getElementById("adsense-slot");
+      if(slot){
+        slot.style.display = "block";
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+      }
+    };
+
+    document.body.appendChild(script);
+  }
+
+  const results = document.getElementById("results");
+  if(!results) return;
+
+  const observer = new MutationObserver(() => {
+    if(letterIsVisible()){
+      observer.disconnect();
+      loadAdSense();
+    }
+  });
+
+  observer.observe(results, {
+    childList: true,
+    subtree: true
+  });
+})();
+</script>
 
 
 
@@ -769,4 +827,5 @@ function typeSequence() {
 
 </body>
 </html>
+
 
